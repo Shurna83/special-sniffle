@@ -1,25 +1,41 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useRef, useState } from "react";
+import { loadVideos } from "./api/loadVideos";
+import { Header } from "./components/header";
+import { Videos } from "./components/videos";
+import { VideosContext } from "./context";
+import { Video } from "./model/video";
 
 function App() {
+  const [videos, setVideos] = useState<Video[]>([]);
+  const allVideosRef = useRef<Video[]>([]);
+
+  async function start(): Promise<void> {
+    const videos = await loadVideos();
+    setVideos(videos);
+    allVideosRef.current = videos;
+  }
+
+  const startedRef = useRef(false);
+
+  useEffect(() => {
+    if (startedRef.current) {
+      return;
+    }
+    startedRef.current = true;
+    start();
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <VideosContext.Provider
+      value={{
+        filteredVideos: videos,
+        setVideos,
+        allVideos: allVideosRef.current,
+      }}
+    >
+      <Header />
+      <Videos />
+    </VideosContext.Provider>
   );
 }
 
