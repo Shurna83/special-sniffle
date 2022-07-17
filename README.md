@@ -2,6 +2,10 @@
 
 Excerise in layout improvements
 
+## Improvement done
+
+I just implemented a sticky header functionality, so that when scrolling the search bar does not disappear.
+
 ## How to run
 
 This simple app was created with create-react-app to same time, just run `npm start` and connect to localhost:3000
