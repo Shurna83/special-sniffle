@@ -6,21 +6,17 @@ export const Search = () => {
 
   const { setVideos, allVideos } = useContext(VideosContext);
 
-  const searchBy = (filter: string) =>
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInput(e.target.value);
+  };
+
+  const handleClick = () => {
+    const filter = input;
     setVideos(
       !filter
         ? allVideos
         : allVideos.filter((v) => !!v.title.match(new RegExp(filter, "i")))
     );
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const filter = e.target.value;
-    setInput(filter);
-    searchBy(filter);
-  };
-
-  const handleClick = () => {
-    searchBy(input);
   };
 
   return (
